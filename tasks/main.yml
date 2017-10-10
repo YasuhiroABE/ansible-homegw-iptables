@@ -11,9 +11,9 @@
   template:
     src: ifpreup.iptables.j2
     dest: /etc/network/if-pre-up.d/iptables
-    owner: {{ homegw_iptables_script_permission.owner }}
-    group: {{ homegw_iptables_script_permission.group }}
-    mode:  {{ homegw_iptables_script_permission.mode }}
+    owner: "{{ homegw_iptables_script_permission.owner }}"
+    group: "{{ homegw_iptables_script_permission.group }}"
+    mode:  "{{ homegw_iptables_script_permission.mode }}"
   register: result
   
 - name: setup if-pre-up.d file for ipv6
@@ -21,19 +21,19 @@
   template:
     src: ifpreup.ip6tables.j2
     dest: /etc/network/if-pre-up.d/ip6tables
-    owner: {{ homegw_iptables_script_permission.owner }}
-    group: {{ homegw_iptables_script_permission.group }}
-    mode:  {{ homegw_iptables_script_permission.mode }}
+    owner: "{{ homegw_iptables_script_permission.owner }}"
+    group: "{{ homegw_iptables_script_permission.group }}"
+    mode:  "{{ homegw_iptables_script_permission.mode }}"
   register: result
   
 - name: setup iptable config file
   become: True
   template:
     src: iptables.iptables.conf.j2
-    dest: {{ homegw_iptables_config_path }}
-    owner: {{ homegw_iptables_config_permission.owner }}
-    group: {{ homegw_iptables_config_permission.group }}
-    mode:  {{ homegw_iptables_config_permission.mode }}
+    dest: "{{ homegw_iptables_config_path }}"
+    owner: "{{ homegw_iptables_config_permission.owner }}"
+    group: "{{ homegw_iptables_config_permission.group }}"
+    mode:  "{{ homegw_iptables_config_permission.mode }}"
   notify:
     - restart iptables
   register: result
@@ -42,10 +42,10 @@
   become: True
   template:
     src: iptables.ip6tables.conf.j2
-    dest: {{ homegw_ip6tables_config_path }}
-    owner: {{ homegw_iptables_config_permission.owner }}
-    group: {{ homegw_iptables_config_permission.group }}
-    mode:  {{ homegw_iptables_config_permission.mode }}
+    dest: "{{ homegw_ip6tables_config_path }}"
+    owner: "{{ homegw_iptables_config_permission.owner }}"
+    group: "{{ homegw_iptables_config_permission.group }}"
+    mode:  "{{ homegw_iptables_config_permission.mode }}"
   notify:
     - restart ip6tables
   register: result

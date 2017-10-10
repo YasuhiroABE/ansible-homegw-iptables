@@ -24,7 +24,7 @@ Role Variables
 --------------
 
 ### Default 
-	## configuration filepath 
+	## configuration filepath stored temporary.
 	homegw_iptables_config_path: /etc/network/iptables.conf
 	homegw_ip6tables_config_path: /etc/network/ip6tables.conf
 
