@@ -1,0 +1,6 @@
+---
+- name: restart iptables
+  shell: /sbin/iptables-restore < /etc/network/iptables.conf
+  
+- name: restart ip6tables
+  shell: /sbin/ip6tables-restore < /etc/network/ip6tables.conf

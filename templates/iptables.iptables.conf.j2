@@ -1,0 +1,39 @@
+*nat
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+-A POSTROUTING -o {{ pppoe_default_device }} -j MASQUERADE
+COMMIT
+*mangle
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+-A FORWARD -o {{ pppoe_default_device }} -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+-A POSTROUTING -o {{ pppoe_default_device }} -p tcp -m tcpmss --mss 1415:65535 -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1414
+COMMIT
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT DROP [0:0]
+:logaccept - [0:0]
+:logdrop - [0:0]
+-A INPUT -i lo -j ACCEPT
+-A INPUT -i {{ homegw_iptables_external_eth_device }} -p all -m state --state NEW -j DROP
+-A INPUT -i {{ homegw_iptables_internal_eth_device }} -j ACCEPT
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -p tcp -m tcp --tcp-flags RST RST -j DROP
+-A FORWARD -i lo -o lo -j ACCEPT
+-A FORWARD -i {{ homegw_iptables_internal_eth_device }} -j ACCEPT
+-A FORWARD -i {{ homegw_iptables_external_eth_device }} -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A OUTPUT -o lo -j ACCEPT
+-A OUTPUT -o {{ homegw_iptables_internal_eth_device }} -j ACCEPT
+-A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A OUTPUT -m state --state NEW -j ACCEPT
+-A logaccept -j LOG --log-prefix "accepted: "
+-A logaccept -j ACCEPT
+-A logdrop -j LOG --log-prefix "dropped: "
+-A logdrop -j DROP
+COMMIT

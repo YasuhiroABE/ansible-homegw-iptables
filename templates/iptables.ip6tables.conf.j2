@@ -1,0 +1,55 @@
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT DROP [0:0]
+:logdrop - [0:0]
+:logdropfwd - [0:0]
+:logdropout - [0:0]
+-A INPUT -i lo -j ACCEPT
+-A INPUT -p udp -m udp --sport 546 --dport 547 -j ACCEPT
+-A INPUT -p udp -m udp --sport 547 --dport 546 -j ACCEPT
+-A INPUT -i {{ homegw_iptables_internal_eth_device }} -m state --state NEW -j ACCEPT
+-A INPUT -i {{ homegw_iptables_internal_eth_device }} -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -i {{ homegw_iptables_external_eth_device }} -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT              -p ipv6-icmp --icmpv6-type 1   -j ACCEPT
+-A INPUT              -p ipv6-icmp --icmpv6-type 2   -j ACCEPT
+-A INPUT              -p ipv6-icmp --icmpv6-type 3   -j ACCEPT
+-A INPUT              -p ipv6-icmp --icmpv6-type 4   -j ACCEPT
+-A INPUT              -p ipv6-icmp --icmpv6-type 133 -j ACCEPT
+-A INPUT              -p ipv6-icmp --icmpv6-type 134 -j ACCEPT
+-A INPUT              -p ipv6-icmp --icmpv6-type 135 -j ACCEPT
+-A INPUT              -p ipv6-icmp --icmpv6-type 136 -j ACCEPT
+-A INPUT              -p ipv6-icmp --icmpv6-type 137 -j ACCEPT
+-A INPUT              -p ipv6-icmp --icmpv6-type 141 -j ACCEPT
+-A INPUT              -p ipv6-icmp --icmpv6-type 142 -j ACCEPT
+-A INPUT -s fe80::/10 -p ipv6-icmp --icmpv6-type 130 -j ACCEPT
+-A INPUT -s fe80::/10 -p ipv6-icmp --icmpv6-type 131 -j ACCEPT
+-A INPUT -s fe80::/10 -p ipv6-icmp --icmpv6-type 132 -j ACCEPT
+-A INPUT -s fe80::/10 -p ipv6-icmp --icmpv6-type 143 -j ACCEPT
+-A INPUT              -p ipv6-icmp --icmpv6-type 148 -j ACCEPT
+-A INPUT              -p ipv6-icmp --icmpv6-type 149 -j ACCEPT
+-A INPUT -s fe80::/10 -p ipv6-icmp --icmpv6-type 151 -j ACCEPT
+-A INPUT -s fe80::/10 -p ipv6-icmp --icmpv6-type 152 -j ACCEPT
+-A INPUT -s fe80::/10 -p ipv6-icmp --icmpv6-type 153 -j ACCEPT
+-A INPUT -p tcp -m tcp --tcp-flags RST RST -j DROP
+-A INPUT -j logdrop
+-N ICMPFLOOD
+-A ICMPFLOOD -m recent --set --name ICMP --rsource
+-A ICMPFLOOD -m recent --update --seconds 1 --hitcount 6 --name ICMP --rsource --rttl -m limit --limit 1/sec --limit-burst 1 -j LOG --log-prefix "ip6tables[ICMP-flood]: "
+-A ICMPFLOOD -m recent --update --seconds 1 --hitcount 6 --name ICMP --rsource --rttl -j DROP
+-A ICMPFLOOD -j ACCEPT
+-A FORWARD -i lo -o lo -j ACCEPT
+-A FORWARD -i {{ homegw_iptables_internal_eth_device }} -j ACCEPT
+-A FORWARD -i {{ homegw_iptables_external_eth_device }} -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A FORWARD -j logdropfwd
+-A OUTPUT -o lo -j ACCEPT
+-A OUTPUT -o {{ homegw_iptables_internal_eth_device }} -j ACCEPT
+-A OUTPUT -o {{ homegw_iptables_external_eth_device }} -j ACCEPT
+-A OUTPUT -j logdropout
+-A logdrop -j LOG --log-prefix "dropped: "
+-A logdrop -j DROP
+-A logdropfwd -j LOG --log-prefix "[forward] dropped: "
+-A logdropfwd -j DROP
+-A logdropout -j LOG --log-prefix "[output] dropped: "
+-A logdropout -j DROP
+COMMIT
