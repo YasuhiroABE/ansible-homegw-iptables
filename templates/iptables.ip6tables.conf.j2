@@ -11,6 +11,9 @@
 -A INPUT -i {{ homegw_iptables_internal_eth_device }} -m state --state NEW -j ACCEPT
 -A INPUT -i {{ homegw_iptables_internal_eth_device }} -m state --state RELATED,ESTABLISHED -j ACCEPT
 -A INPUT -i {{ homegw_iptables_external_eth_device }} -m state --state RELATED,ESTABLISHED -j ACCEPT
+{% for port in homegw_iptables_external_accept_tcp_ports %}
+-A INPUT -i {{ homegw_iptables_external_eth_device }} -p tcp --dport {{ port }} -j ACCEPT
+{% endfor %}
 -A INPUT              -p ipv6-icmp --icmpv6-type 1   -j ACCEPT
 -A INPUT              -p ipv6-icmp --icmpv6-type 2   -j ACCEPT
 -A INPUT              -p ipv6-icmp --icmpv6-type 3   -j ACCEPT

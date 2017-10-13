@@ -42,6 +42,9 @@ Role Variables
 	homegw_iptables_external_eth_device: 'eth0'
 	homegw_iptables_internal_eth_device: 'eth1'
 
+    # accept tcp port list
+    homegw_iptables_external_accept_tcp_ports: []
+
 Dependencies
 ------------
 
@@ -56,6 +59,9 @@ Example Playbook
 	  vars:
 	    homegw_iptables_external_eth_device: 'eth0'
 		homegw_iptables_internal_eth_device: 'br0'
+		homegw_iptables_external_accept_tcp_ports: 
+		  - 22
+		  - 80
       roles:
          - YasuhiroABE.homegw-iptables
 

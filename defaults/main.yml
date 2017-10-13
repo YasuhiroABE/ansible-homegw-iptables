@@ -18,3 +18,6 @@ homegw_iptables_script_permission:
 
 homegw_iptables_external_eth_device: 'eth0'
 homegw_iptables_internal_eth_device: 'eth1'
+
+# accept tcp port list
+homegw_iptables_external_accept_tcp_ports: []
