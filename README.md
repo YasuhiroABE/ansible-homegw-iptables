@@ -24,23 +24,23 @@ Role Variables
 --------------
 
 ### Default 
-	## configuration filepath stored temporary.
-	homegw_iptables_config_path: /etc/network/iptables.conf
-	homegw_ip6tables_config_path: /etc/network/ip6tables.conf
+    ## configuration filepath stored temporary.
+    homegw_iptables_config_path: /etc/network/iptables.conf
+    homegw_ip6tables_config_path: /etc/network/ip6tables.conf
 
-	## common setting for both iptables.conf and ip6tables.conf
-	homegw_iptables_config_permission:
-	  owner: root
-	  group: root
-	  mode: '0644'
+    ## common setting for both iptables.conf and ip6tables.conf
+    homegw_iptables_config_permission:
+      owner: root
+      group: root
+      mode: '0644'
 
-	homegw_iptables_script_permission:
-	  owner: root
-	  group: root
-	  mode: '0750'
+    homegw_iptables_script_permission:
+      owner: root
+      group: root
+      mode: '0750'
 
-	homegw_iptables_external_eth_device: 'eth0'
-	homegw_iptables_internal_eth_device: 'eth1'
+    homegw_iptables_external_eth_device: 'eth0'
+    homegw_iptables_internal_eth_device: 'eth1'
 
     # accept tcp port list
     homegw_iptables_external_accept_tcp_ports: []
@@ -56,12 +56,12 @@ Example Playbook
 ----------------
 
     - hosts: all
-	  vars:
-	    homegw_iptables_external_eth_device: 'eth0'
-		homegw_iptables_internal_eth_device: 'br0'
-		homegw_iptables_external_accept_tcp_ports: 
-		  - 22
-		  - 80
+      vars:
+        homegw_iptables_external_eth_device: 'eth0'
+        homegw_iptables_internal_eth_device: 'br0'
+        homegw_iptables_external_accept_tcp_ports: 
+          - 22
+          - 80
       roles:
          - YasuhiroABE.homegw-iptables
 
