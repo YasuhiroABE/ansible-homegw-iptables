@@ -34,8 +34,6 @@
     owner: "{{ homegw_iptables_config_permission.owner }}"
     group: "{{ homegw_iptables_config_permission.group }}"
     mode:  "{{ homegw_iptables_config_permission.mode }}"
-  notify:
-    - restart iptables
   register: result
 
 - name: setup ip6table config file
@@ -46,6 +44,4 @@
     owner: "{{ homegw_iptables_config_permission.owner }}"
     group: "{{ homegw_iptables_config_permission.group }}"
     mode:  "{{ homegw_iptables_config_permission.mode }}"
-  notify:
-    - restart ip6tables
   register: result
