@@ -44,6 +44,18 @@ Role Variables
 
     # accept tcp port list
     homegw_iptables_external_accept_tcp_ports: []
+	
+	# accept udp port list
+	homegw_iptables_external_accept_udp_ports: []
+
+	# add path-through device into input chain (e.g. -A INPUT -i lo -j ACCEPT)
+	homegw_iptables_accept_input_eth_devices: ['lo']
+
+	# add path-through device into forward chain (e.g. -A FORWARD -i lo -o lo -j ACCEPT)
+	homegw_iptables_accept_forward_eth_devices: [('lo','lo')]
+
+	# add path-through device into output chain (e.g. -A OUTPUT -o lo -j ACCEPT)
+	homegw_iptables_accept_output_eth_devices: ['lo']
 
 Dependencies
 ------------

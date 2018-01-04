@@ -20,18 +20,27 @@ COMMIT
 :OUTPUT DROP [0:0]
 :logaccept - [0:0]
 :logdrop - [0:0]
--A INPUT -i lo -j ACCEPT
+{% for dev in homegw_iptables_accept_input_eth_devices %}
+-A INPUT -i {{ dev }} -j ACCEPT
+{% endfor %}
 {% for port in homegw_iptables_external_accept_tcp_ports %}
 -A INPUT -i {{ homegw_iptables_external_eth_device }} -p tcp --dport {{ port }} -j ACCEPT
+{% endfor %}
+{% for port in homegw_iptables_external_accept_udp_ports %}
+-A INPUT -i {{ homegw_iptables_external_eth_device }} -p udp --dport {{ port }} -j ACCEPT
 {% endfor %}
 -A INPUT -i {{ homegw_iptables_external_eth_device }} -p all -m state --state NEW -j DROP
 -A INPUT -i {{ homegw_iptables_internal_eth_device }} -j ACCEPT
 -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 -A INPUT -p tcp -m tcp --tcp-flags RST RST -j DROP
--A FORWARD -i lo -o lo -j ACCEPT
+{% for devin,devout in homegw_iptables_accept_forward_eth_devices %}
+-A FORWARD -i {{ devin }}  -o {{ devout }} -j ACCEPT
+{% endfor %}
 -A FORWARD -i {{ homegw_iptables_internal_eth_device }} -j ACCEPT
 -A FORWARD -i {{ homegw_iptables_external_eth_device }} -m state --state RELATED,ESTABLISHED -j ACCEPT
--A OUTPUT -o lo -j ACCEPT
+{% for dev in homegw_iptables_accept_output_eth_devices %}
+-A OUTPUT -o {{ dev }} -j ACCEPT
+{% endfor %}
 -A OUTPUT -o {{ homegw_iptables_internal_eth_device }} -j ACCEPT
 -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 -A OUTPUT -m state --state NEW -j ACCEPT
