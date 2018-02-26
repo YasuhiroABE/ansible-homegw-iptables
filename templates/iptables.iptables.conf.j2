@@ -12,7 +12,7 @@ COMMIT
 :OUTPUT ACCEPT [0:0]
 :POSTROUTING ACCEPT [0:0]
 -A FORWARD -o {{ homegw_iptables_external_eth_device }} -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
--A POSTROUTING -o {{ homegw_iptables_external_eth_device }} -p tcp -m tcpmss --mss 1415:65535 -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1414
+-A POSTROUTING -o {{ homegw_iptables_external_eth_device }} -p tcp -m tcpmss --mss {{ homegw_iptables_mss }}:65535 -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss {{ homegw_iptables_mss }}
 COMMIT
 *filter
 :INPUT DROP [0:0]

@@ -33,3 +33,6 @@ homegw_iptables_accept_forward_eth_devices: [['lo','lo']]
 
 # add path-through device into output chain (e.g. -A OUTPUT -o lo -j ACCEPT)
 homegw_iptables_accept_output_eth_devices: ['lo']
+
+# set the MSS number
+homegw_iptables_mss: 1414
